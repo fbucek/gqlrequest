@@ -1,5 +1,5 @@
 use color_eyre::Result;
-use serde::Serialize;
+use serde::{Serialize, Deserialize};
 use serde_json::value::Value;
 use std::collections::HashMap;
 
@@ -77,6 +77,26 @@ impl GqlRequest {
         }
     }
 }
+
+#[derive(Debug, Deserialize)]
+pub struct GqlResponse<T> {
+    pub data: Option<T>,
+    pub errors: Option<Vec<ErrorMsg>>
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ErrorMsg {
+    pub message: String,
+    pub locations: Vec<Location>,
+    pub path: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Location {
+    pub line: i32,
+    pub column: i32,
+}
+
 
 #[cfg(test)]
 mod tests {
