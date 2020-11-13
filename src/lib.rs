@@ -210,14 +210,13 @@ mod tests {
             pub sensor: Sensor,
         }
 
-
-
         let response: GqlResponse<SensorData> = serde_json::from_str(expected).unwrap();
 
         let data = response.data.unwrap();
 
-        assert_eq!(data.sensor.name, "unnamed-59de6057-e913-45e3-95b1-e628741443fd");
+        assert_eq!(
+            data.sensor.name,
+            "unnamed-59de6057-e913-45e3-95b1-e628741443fd"
+        );
     }
-
-
 }
