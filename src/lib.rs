@@ -1,5 +1,5 @@
 use color_eyre::Result;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use serde_json::value::Value;
 use std::collections::HashMap;
 
@@ -81,7 +81,7 @@ impl GqlRequest {
 #[derive(Debug, Deserialize)]
 pub struct GqlResponse<T> {
     pub data: Option<T>,
-    pub errors: Option<Vec<ErrorMsg>>
+    pub errors: Option<Vec<ErrorMsg>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -96,7 +96,6 @@ pub struct Location {
     pub line: i32,
     pub column: i32,
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -190,4 +189,35 @@ mod tests {
 
         assert_eq!(request, expected);
     }
+
+    #[test]
+    fn response_test() {
+        let expected = r#"{"data":{"sensor":{"createdAt":"2020-09-15T07:08:54.668686+00:00","id":"59de6057-e913-45e3-95b1-e628741443fd","location":null,"macaddress":"DC:A6:32:0B:62:37","name":"unnamed-59de6057-e913-45e3-95b1-e628741443fd","updatedAt":"2020-09-15T07:08:54.668686+00:00"}}}"#;
+
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        pub struct Sensor {
+            pub name: String,
+            pub location: Option<String>,
+            pub macaddress: String,
+            pub created_at: String,
+            pub updated_at: String,
+        }
+
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        pub struct SensorData {
+            pub sensor: Sensor,
+        }
+
+
+
+        let response: GqlResponse<SensorData> = serde_json::from_str(expected).unwrap();
+
+        let data = response.data.unwrap();
+
+        assert_eq!(data.sensor.name, "unnamed-59de6057-e913-45e3-95b1-e628741443fd");
+    }
+
+
 }
