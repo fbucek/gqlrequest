@@ -88,7 +88,8 @@ pub struct GqlResponse<T> {
 pub struct ErrorMsg {
     pub message: String,
     pub locations: Vec<Location>,
-    pub path: Vec<String>,
+    pub path: Option<Vec<Value>>,
+    pub extensions: Option<Value>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -218,5 +219,65 @@ mod tests {
             data.sensor.name,
             "unnamed-59de6057-e913-45e3-95b1-e628741443fd"
         );
+    }
+
+    /// Error taken from: https://lucasconstantino.github.io/graphiql-online/
+    #[test]
+    fn error_response_ext_test() {
+        let expected = r#"{ "errors": [ { "message": "Cannot query field \"named\" on type \"Country\". Did you mean \"name\"?", "locations": [ { "line": 34, "column": 5 } ], "extensions": { "code": "GRAPHQL_VALIDATION_FAILED" } } ] }"#;
+
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Country {
+            name: String,
+        }
+
+        let response: GqlResponse<Country> = serde_json::from_str(expected).unwrap();
+
+        assert!(response.data.is_none());
+        assert!(response.errors.is_some());
+
+        let errors = response.errors.unwrap();
+
+        assert_eq!(errors.len(), 1);
+
+        let error = errors.first().unwrap();
+        assert_eq!(error.message, r#"Cannot query field "named" on type "Country". Did you mean "name"?"#);
+        assert_eq!(error.locations.len(), 1);
+        let location = error.locations.first().unwrap();
+        assert_eq!(location.line, 34);
+        assert_eq!(location.column, 5);
+    }
+
+
+    /// Error taken from: https://lucasconstantino.github.io/graphiql-online/
+    #[test]
+    fn error_response_path_test() {
+        let expected = r#"{ "data": null, "errors": [ { "message": "Failed to parse \"UUID\": invalid length: expected one of [36, 32], found 7", "locations": [ { "line": 2, "column": 14 } ], "path": [ "sensor" ] } ] }"#;
+
+        #[derive(Debug, Deserialize)]
+        #[serde(rename_all = "camelCase")]
+        struct Country {
+            name: String,
+        }
+
+        let response: GqlResponse<Country> = serde_json::from_str(expected).unwrap();
+
+        assert!(response.data.is_none());
+        assert!(response.errors.is_some());
+
+        let errors = response.errors.unwrap();
+
+        assert_eq!(errors.len(), 1);
+
+        let error = errors.first().unwrap();
+        assert_eq!(error.message, r#"Failed to parse "UUID": invalid length: expected one of [36, 32], found 7"#);
+        assert_eq!(error.locations.len(), 1);
+        let location = error.locations.first().unwrap();
+        assert_eq!(location.line, 2);
+        assert_eq!(location.column, 14);
+
+        assert!(error.path.is_some());
+
     }
 }
