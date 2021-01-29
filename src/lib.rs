@@ -16,7 +16,7 @@ use std::collections::HashMap;
 ///     "query": "mutation createBook($book: createBook!) {\n  createBook(book: $book) {\n    title\n }\n}\n"
 /// }
 /// ```
-#[derive(Debug, Serialize)]
+#[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GqlRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
