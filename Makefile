@@ -7,6 +7,7 @@ check:
 	cargo check
 	cargo clippy
 	cargo fmt
+	cargo audit
 	cargo +nightly udeps
 checkdeny:
 	cargo deny check
