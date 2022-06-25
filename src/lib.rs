@@ -1,4 +1,4 @@
-use color_eyre::Result;
+use eyre::Result;
 use serde::{Deserialize, Serialize};
 use serde_json::value::Value;
 use std::collections::HashMap;
