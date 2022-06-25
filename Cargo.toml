@@ -1,8 +1,11 @@
 [package]
 name = "gqlrequest"
+description = "Simple GraphQL request helper"
 version = "0.1.1"
 authors = ["Filip Bucek <fbucek@invloop.cz>"]
+license = "MIT"
 edition = "2018"
+
 
 [dependencies]
 eyre = "0.6"
