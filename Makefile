@@ -23,4 +23,4 @@ test:
 
 publish: all
 	# not published yet
-	# cargo publish
+	cargo publish
