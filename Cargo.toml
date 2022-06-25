@@ -5,7 +5,6 @@ authors = ["Filip Bucek <fbucek@invloop.cz>"]
 edition = "2018"
 
 [dependencies]
-tracing = "0.1"
 eyre = "0.6"
 
 serde = { version = "1.0", features = ["derive"] }
