@@ -242,13 +242,15 @@ mod tests {
         assert_eq!(errors.len(), 1);
 
         let error = errors.first().unwrap();
-        assert_eq!(error.message, r#"Cannot query field "named" on type "Country". Did you mean "name"?"#);
+        assert_eq!(
+            error.message,
+            r#"Cannot query field "named" on type "Country". Did you mean "name"?"#
+        );
         assert_eq!(error.locations.len(), 1);
         let location = error.locations.first().unwrap();
         assert_eq!(location.line, 34);
         assert_eq!(location.column, 5);
     }
-
 
     /// Error taken from: https://lucasconstantino.github.io/graphiql-online/
     #[test]
@@ -271,13 +273,15 @@ mod tests {
         assert_eq!(errors.len(), 1);
 
         let error = errors.first().unwrap();
-        assert_eq!(error.message, r#"Failed to parse "UUID": invalid length: expected one of [36, 32], found 7"#);
+        assert_eq!(
+            error.message,
+            r#"Failed to parse "UUID": invalid length: expected one of [36, 32], found 7"#
+        );
         assert_eq!(error.locations.len(), 1);
         let location = error.locations.first().unwrap();
         assert_eq!(location.line, 2);
         assert_eq!(location.column, 14);
 
         assert!(error.path.is_some());
-
     }
 }
