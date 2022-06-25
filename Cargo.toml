@@ -1,6 +1,6 @@
 [package]
 name = "gqlrequest"
-version = "0.1.0"
+version = "0.1.1-alpha.0"
 authors = ["Filip Bucek <filip.bucek@icsystems.ai>"]
 edition = "2018"
 

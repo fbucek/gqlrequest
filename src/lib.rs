@@ -229,6 +229,7 @@ mod tests {
         #[derive(Debug, Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Country {
+            #[allow(dead_code)]
             name: String,
         }
 
@@ -260,6 +261,7 @@ mod tests {
         #[derive(Debug, Deserialize)]
         #[serde(rename_all = "camelCase")]
         struct Country {
+            #[allow(dead_code)]
             name: String,
         }
 
